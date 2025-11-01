@@ -1,43 +1,32 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
-  </q-page>
+  <header>
+    <h2 class="text-h6 text-weight-bold">Expenses</h2>
+  </header>
+
+  <div class>
+    <add-expense-button />
+
+    <div class="text-subtitle1 flex items-center">
+      Total amount:
+      <span class="q-ml-xs text-weight-bold">
+        {{ expenseTotal.totalAmount.value }}
+      </span>
+      <q-icon class="q-ml-xs" :name="expenseTotal.totalAmount.value < 0 ? 'arrow_circle_down' : 'arrow_circle_up'"
+        :color="expenseTotal.totalAmount.value < 0 ? 'negative' : 'positive'" />
+    </div>
+  </div>
+
+  <expense-list />
+
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import type { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
+import { ExpenseList } from 'src/entities/expense';
+import { AddExpenseButton } from 'src/features/expense/add-expense';
+// import { useExpenseQueries } from 'src/entities/expense';
+import { useExpenseTotals } from 'src/entities/expense';
 
-const todos = ref<Todo[]>([
-  {
-    id: 1,
-    content: 'ct1',
-  },
-  {
-    id: 2,
-    content: 'ct2',
-  },
-  {
-    id: 3,
-    content: 'ct3',
-  },
-  {
-    id: 4,
-    content: 'ct4',
-  },
-  {
-    id: 5,
-    content: 'ct5',
-  },
-]);
+const expenseTotal = useExpenseTotals()
 
-const meta = ref<Meta>({
-  totalCount: 1200,
-});
+// const expenseStore = useExpenseStore()
 </script>

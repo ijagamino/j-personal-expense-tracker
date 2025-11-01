@@ -5,6 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { setupAuthGuard } from './guards';
 import routes from './routes';
 
 /*
@@ -32,6 +33,8 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  setupAuthGuard(Router);
 
   return Router;
 });
