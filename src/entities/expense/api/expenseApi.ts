@@ -8,8 +8,8 @@ export const expenseApi = {
 
     if (filters && filters.from && filters.to) {
       query = query
-        .gte('created_at', formatISO(startOfDay(filters.from)))
-        .lte('created_at', formatISO(endOfDay(filters.to)));
+        .gte('date', formatISO(startOfDay(filters.from)))
+        .lte('date', formatISO(endOfDay(filters.to)));
     }
 
     const { data, error } = await query;
@@ -42,17 +42,17 @@ export const expenseApi = {
         ...expense,
         user_id: user.id,
       })
-      .select('* ')
+      .select('*')
       .single();
 
     if (error) throw error;
     return data;
   },
 
-  async update(id: number, expense: UpdateExpenseDto): Promise<Expense> {
+  async update(id: number, payload: UpdateExpenseDto): Promise<Expense> {
     const { data, error } = await supabase
       .from('expenses')
-      .update(expense)
+      .update(payload)
       .eq('id', id)
       .select('*')
       .single();

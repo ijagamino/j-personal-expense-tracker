@@ -1,9 +1,5 @@
 <template>
-  <header>
-    <h2 class="text-h6 text-weight-bold">Expenses</h2>
-  </header>
-
-  <div class>
+  <div>
     <add-expense-button />
 
     <div class="text-subtitle1 flex items-center">

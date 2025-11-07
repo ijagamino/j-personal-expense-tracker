@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import { UseMutationWithNotify } from 'src/shared/api';
 import type { MaybeRef } from 'vue';
 import { computed, toValue } from 'vue';
 import { expenseApi } from '../api/expenseApi';
@@ -14,18 +15,9 @@ export function useExpenses(filters?: MaybeRef<ExpenseFilters>) {
 }
 
 export function useAddExpense() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return UseMutationWithNotify<Expense, CreateExpenseDto, ExpenseFilters>({
     mutationFn: (expense: CreateExpenseDto) => expenseApi.create(expense),
-
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: expenseKeys.lists() });
-    },
-
-    onError: (error: Error) => {
-      console.error('Failed to add expense:', error.message);
-    },
+    entityKey: expenseKeys,
   });
 }
 
@@ -33,8 +25,8 @@ export function useUpdateExpense() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateExpenseDto }) =>
-      expenseApi.update(id, data),
+    mutationFn: ({ id, payload }: { id: number; payload: UpdateExpenseDto }) =>
+      expenseApi.update(id, payload),
 
     onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries({ queryKey: expenseKeys.lists() });

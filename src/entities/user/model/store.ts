@@ -1,15 +1,12 @@
+import type { User } from '@supabase/supabase-js';
 import _ from 'lodash';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-// import { api } from 'src/boot/axios';
-import type { User } from '@supabase/supabase-js';
 import { supabase } from 'src/shared/api';
+import { baseUrl } from 'src/shared/api/frontend-url';
 import { computed, ref, watch } from 'vue';
-// import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 
 export const useUserStore = defineStore('user', () => {
-  // const router = useRouter();
-
   const token = ref(localStorage.getItem('access_token') || null);
   const user = ref<User | null>();
 
@@ -59,10 +56,8 @@ export const useUserStore = defineStore('user', () => {
 
   watch(token, (newToken) => {
     if (newToken) {
-      // api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
       localStorage.setItem('access_token', newToken);
     } else {
-      // delete api.defaults.headers.common['Authorization']
       localStorage.removeItem('access_token');
     }
   });
@@ -94,6 +89,29 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
+  async function forgotPassword(email: string) {
+    try {
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${baseUrl}/change-password`,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  }
+
+  async function updatePassword(password: string, router: Router) {
+    try {
+      await supabase.auth.updateUser({ password });
+      await router.push({ name: 'home' });
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+    }
+  }
+
   // const isAuthenticated = computed(() => !!token.value && !_.isEmpty(user.value));
   const isAuthenticated = computed(() => !_.isEmpty(user.value));
 
@@ -107,6 +125,8 @@ export const useUserStore = defineStore('user', () => {
     handleLogin,
     handleRegister,
     logout,
+    forgotPassword,
+    updatePassword,
   };
 });
 

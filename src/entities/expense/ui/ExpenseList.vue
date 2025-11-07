@@ -1,22 +1,22 @@
 <template>
-  <q-splitter v-model="splitterModel" :horizontal="$q.screen.lt.md" style="height: 32em;">
-    <template #before>
-      <div class=q-pa-md>
-        <q-date v-model="selectedDate" range today-btn :title="dateTitle" />
-      </div>
-    </template>
+  <q-card flat bordered>
+    <q-splitter v-model="splitterModel" :horizontal="$q.screen.lt.md" style="height: 32em;">
+      <template #before>
+        <q-date class="fit" v-model="selectedDate" range today-btn :title="dateTitle" square flat />
+      </template>
 
-    <template #after>
-      <div class="q-pa-md">
-        <div v-if="isPending">Loading...</div>
-        <div v-else class="col q-col-gutter-md">
-          <div v-for="expense in expenses" :key="expense.id">
-            <expense-card v-bind="expense" />
+      <template #after>
+        <div class="q-pa-md">
+          <div v-if="isPending">Loading...</div>
+          <div v-else class="col q-col-gutter-md">
+            <div v-for="expense in expenses" :key="expense.id">
+              <expense-card v-bind="expense" />
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-  </q-splitter>
+      </template>
+    </q-splitter>
+  </q-card>
 </template>
 
 <script setup lang="ts">
@@ -51,7 +51,6 @@ watch(selectedDate, (val) => {
 const dateTitle = computed(() => {
   const formatDate = (date: string) =>
     format((parse(date, 'yyyy/MM/dd', new Date())), 'MMM d');
-  // rturn const formatted = format(parsedDate, 'MMM d');
 
   const val = selectedDate.value;
 

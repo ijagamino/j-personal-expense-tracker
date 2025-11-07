@@ -39,6 +39,7 @@ export type Database = {
         Row: {
           amount: number;
           created_at: string;
+          date: string;
           description: string;
           id: number;
           user_id: string;
@@ -46,6 +47,7 @@ export type Database = {
         Insert: {
           amount: number;
           created_at?: string;
+          date?: string;
           description?: string;
           id?: number;
           user_id?: string;
@@ -53,6 +55,7 @@ export type Database = {
         Update: {
           amount?: number;
           created_at?: string;
+          date?: string;
           description?: string;
           id?: number;
           user_id?: string;
