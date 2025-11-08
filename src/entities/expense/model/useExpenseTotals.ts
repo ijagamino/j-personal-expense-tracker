@@ -1,3 +1,4 @@
+import Big from 'big.js';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useExpenseStore } from './store';
@@ -12,7 +13,10 @@ export function useExpenseTotals() {
 
   const totalAmount = computed(() => {
     if (!expenses.value) return 0;
-    return expenses.value.reduce((sum, e: Expense) => sum + Number(e.amount), 0);
+
+    const total = expenses.value.reduce((sum, e: Expense) => sum.plus(e.amount), Big(0)).toNumber();
+
+    return total;
   });
 
   return {
